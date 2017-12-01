@@ -116,21 +116,21 @@ enum VariantID {
   Base_Seq = 0,
   RAJA_Seq,
 
-#if defined(RAJA_ENABLE_OPENMP)
+//#if defined(RAJA_ENABLE_OPENMP)
   Base_OpenMP,
   RAJA_OpenMP,
 
-#if defined(RAJA_ENABLE_TARGET_OPENMP)  
+//#if defined(RAJA_ENABLE_TARGET_OPENMP)  
   Base_OpenMPTarget,
   RAJA_OpenMPTarget,
-#endif
+//#endif
 
-#endif
+//#endif
 
-#if defined(RAJA_ENABLE_CUDA)
+//#if defined(RAJA_ENABLE_CUDA)
   Base_CUDA,
   RAJA_CUDA,
-#endif
+//#endif
 
   NumVariants // Keep this one last and NEVER comment out (!!)
 

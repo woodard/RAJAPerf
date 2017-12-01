@@ -1,0 +1,61 @@
+CUDA_HOME = /usr/tcetmp/packages/cuda-8.0/
+CUDA_INCLUDES = -I${CUDA_HOME}/include
+PERF_INCLUDES = -I/g/g0/holger/workspace/RAJAPerf_github/src  
+RAJA_INCLUDES = -I/g/g0/holger/workspace/RAJAPerf_github/tpl/RAJA/include 
+RAJA_INCLUDES_SPECIFIC = -I/g/g0/holger/workspace/RAJAPerf_github/build_blueos_nvcc8.0_clang-coral-2017.10.13/tpl/RAJA/include
+INCLUDES = ${CUDA_INCLUDES} ${PERF_INCLUDES} ${RAJA_INCLUDES} ${RAJA_INCLUDES_SPECIFIC} 
+CUDA_COMPILE = ${CUDA_HOME}/bin/nvcc
+CUDA_COMPILE += -x=cu 
+CUDA_COMPILE += -m64 -DUSE_OPENMP -DUSE_CUDA
+CUDA_COMPILE += -O3 -restrict
+CUDA_COMPILE += -arch sm_60
+CUDA_COMPILE += --std c++11
+CUDA_COMPILE += --expt-extended-lambda
+CUDA_COMPILE += -ccbin /usr/tce/packages/clang/clang-coral-2017.10.13/bin/clang++ -Xcompiler -O3 -Xcompiler -fopenmp 
+CUDA_COMPILE += -DNVCC
+CUDA_COMPILE += ${INCLUDES}
+#CUDA_COMPILE += -rdc=true
+
+LINK = /usr/tce/packages/clang/clang-coral-2017.10.13/bin/clang++  
+LINK += -O3 -fopenmp=libomp  
+LINK_SUFFIX =  -rdynamic /usr/tcetmp/packages/cuda-8.0/lib64/libcudart_static.a -lpthread -ldl /usr/lib64/librt.so /g/g0/holger/workspace/RAJAPerf_github/build_blueos_nvcc8.0_clang-coral-2017.10.13/lib/libRAJA.a 
+
+
+all: 
+  $(info $$CUDA_COMPILE = ${CUDA_COMPILE})
+  $(info $$LINK = ${LINK})
+
+build: raja-perf.exe
+
+
+
+DataUtils.o:../src/common/DataUtils.cpp
+	${CUDA_COMPILE} -o $@ -c $<
+Executor.o:../src/common/Executor.cpp
+	${CUDA_COMPILE} -o $@ -c $<
+KernelBase.o:../src/common/KernelBase.cpp
+	${CUDA_COMPILE} -o $@ -c $<
+OutputUtils.o:../src/common/OutputUtils.cpp
+	${CUDA_COMPILE} -o $@ -c $<
+RAJAPerfSuite.o:../src/common/RAJAPerfSuite.cpp
+	${CUDA_COMPILE} -o $@ -c $<
+RunParams.o:../src/common/RunParams.cpp
+	${CUDA_COMPILE} -o $@ -c $<
+INIT3_separate.o:../src/basic/INIT3_separate.cpp
+	${CUDA_COMPILE} -o $@ -c $<
+INIT3_cuda.o:../src/basic/INIT3_cuda.cpp
+	${CUDA_COMPILE} -o $@ -c $<
+RAJAPerfSuiteDriver.o:../src/RAJAPerfSuiteDriver.cpp
+	${CUDA_COMPILE} -o $@ -c $<
+
+raja-perf.exe: DataUtils.o Executor.o KernelBase.o OutputUtils.o RAJAPerfSuite.o RunParams.o INIT3_separate.o INIT3_cuda.o RAJAPerfSuiteDriver.o
+	${LINK} -o $@ $+ ${LINK_SUFFIX}
+
+
+run: build
+	./raja-perf.exe
+
+clean:
+	rm -f raja-perf.exe DataUtils.o Executor.o KernelBase.o OutputUtils.o RAJAPerfSuite.o RunParams.o INIT3_separate.o INIT3_cuda.o RAJAPerfSuiteDriver.o
+
+clobber: clean
