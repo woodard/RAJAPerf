@@ -68,10 +68,6 @@ typedef enum SizeSpec {Mini,Small,Medium,Large,Extralarge,Specundefined} SizeSpe
 enum GroupID {
 
   Basic = 0,
-  Lcals,
-  Polybench,
-  Stream,
-  Apps,
 
   NumGroups // Keep this one last and DO NOT remove (!!)
 
@@ -96,52 +92,7 @@ enum KernelID {
 //
 // Basic kernels...
 //
-  Basic_MULADDSUB = 0,
-  Basic_IF_QUAD,
-  Basic_TRAP_INT,
-  Basic_INIT3,
-  Basic_REDUCE3_INT,
-  Basic_NESTED_INIT,
-  Basic_INIT_VIEW1D,
-  Basic_INIT_VIEW1D_OFFSET,
-
-//
-// Lcals kernels...
-//
-  Lcals_HYDRO_1D,
-  Lcals_EOS,
-  Lcals_INT_PREDICT,
-  Lcals_DIFF_PREDICT,
-  Lcals_FIRST_DIFF,
-  Lcals_PLANCKIAN,
-
-//
-// Polybench kernels...
-//
-  Polybench_2MM,
-  Polybench_3MM,
-  Polybench_GEMMVER,
-
-//
-// Stream kernels...
-//
-  Stream_COPY,
-  Stream_MUL,
-  Stream_ADD,
-  Stream_TRIAD,
-  Stream_DOT,
-
-//
-// Apps kernels...
-//
-  Apps_PRESSURE,
-  Apps_ENERGY,
-  Apps_VOL3D,
-  Apps_DEL_DOT_VEC_2D,
-  Apps_FIR,
-  Apps_LTIMES,
-  Apps_LTIMES_NOVIEW,
-  Apps_COUPLE,
+  Basic_INIT3=0,
 
   NumKernels // Keep this one last and NEVER comment out (!!)
 

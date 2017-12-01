@@ -23,13 +23,27 @@ module load cuda/8.0
 
 PERFSUITE_DIR=$(git rev-parse --show-toplevel)
 
+##cmake \
+##  -DCMAKE_BUILD_TYPE=Release \
+##  -C ${PERFSUITE_DIR}/host-configs/blueos/clang_coral_2017_10_13.cmake \
+##  -DENABLE_OPENMP=On \
+##  -DENABLE_CUDA=Off \
+##  -DOpenMP_CXX_FLAGS="-fopenmp -fopenmp-targets=nvptx64-nvidia-cuda -fopenmp-implicit-declare-target" \
+##  -DENABLE_TARGET_OPENMP=On \
+##  -DPERFSUITE_ENABLE_WARNINGS=Off \
+##  -DENABLE_ALL_WARNINGS=Off \
+##  -DCMAKE_INSTALL_PREFIX=../install_blueos_nvcc8.0_clang-coral-2017.10.13 \
+##  "$@" \
+##  ${PERFSUITE_DIR}
+
+
+
 cmake \
   -DCMAKE_BUILD_TYPE=Release \
-  -C ${PERFSUITE_DIR}/host-configs/blueos/clang_coral_2017_10_13.cmake \
+  -C ${PERFSUITE_DIR}/host-configs/blueos/nvcc_clang_coral_2017_10_13.cmake \
   -DENABLE_OPENMP=On \
   -DENABLE_CUDA=Off \
   -DOpenMP_CXX_FLAGS="-fopenmp -fopenmp-targets=nvptx64-nvidia-cuda -fopenmp-implicit-declare-target" \
-  -DRAJA_ENABLE_TARGET_OPENMP=On \
   -DENABLE_TARGET_OPENMP=On \
   -DPERFSUITE_ENABLE_WARNINGS=Off \
   -DENABLE_ALL_WARNINGS=Off \

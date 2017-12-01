@@ -100,6 +100,7 @@ INIT3::~INIT3()
 {
 }
 
+
 void INIT3::setUp(VariantID vid)
 {
   allocAndInitData(m_out1, getRunSize(), vid);

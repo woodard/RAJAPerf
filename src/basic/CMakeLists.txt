@@ -13,15 +13,22 @@
 #
 ###############################################################################
 
+#blt_add_library(
+#  NAME basic
+#  SOURCES MULADDSUB.cpp 
+#          IF_QUAD.cpp 
+#          TRAP_INT.cpp 
+#          INIT3.cpp
+#          REDUCE3_INT.cpp
+#          NESTED_INIT.cpp
+#          INIT_VIEW1D.cpp
+#          INIT_VIEW1D_OFFSET.cpp
+#  DEPENDS_ON common ${RAJA_PERFSUITE_DEPENDS}
+#  )
+
+
 blt_add_library(
   NAME basic
-  SOURCES MULADDSUB.cpp 
-          IF_QUAD.cpp 
-          TRAP_INT.cpp 
-          INIT3.cpp
-          REDUCE3_INT.cpp
-          NESTED_INIT.cpp
-          INIT_VIEW1D.cpp
-          INIT_VIEW1D_OFFSET.cpp
+  SOURCES INIT3.cpp
   DEPENDS_ON common ${RAJA_PERFSUITE_DEPENDS}
   )
