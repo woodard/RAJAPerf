@@ -183,7 +183,8 @@ void ADD::runKernel(VariantID vid)
 
     case Base_OpenMPTarget : {
 
-#if 1
+
+#if 0
       ADD_DATA;
 
       int n = getRunSize();
@@ -191,6 +192,13 @@ void ADD::runKernel(VariantID vid)
 #else
       int h = omp_get_initial_device();
       int d = omp_get_default_device();
+
+
+      if (omp_get_num_devices() < 1 || d < 0){
+        printf(" ERROR: No device found.\n");
+        exit(1);
+      }
+
 
       Real_ptr a;
       Real_ptr b;
@@ -204,14 +212,14 @@ void ADD::runKernel(VariantID vid)
       omp_target_memcpy( b, m_b, iend * sizeof(Real_type), 0, 0, d, h );
       omp_target_memcpy( c, m_c, iend * sizeof(Real_type), 0, 0, d, h );
 
-      #pragma omp target is_device_ptr(a, b, c) device( d )
-
 #endif
 
       startTimer();
       for (RepIndex_type irep = 0; irep < run_reps; ++irep) {
 
-        #pragma omp target teams distribute parallel for num_teams(NUMTEAMS) schedule(static, 1) 
+        #pragma omp target is_device_ptr(a,b,c) device(d)
+        #pragma omp teams distribute parallel for  num_teams(NUMTEAMS) schedule(static, 1) 
+        //#pragma omp target teams distribute parallel for num_teams(NUMTEAMS) schedule(static, 1) 
         for (Index_type i = ibegin; i < iend; ++i ) {
           ADD_BODY;
         }
@@ -219,7 +227,7 @@ void ADD::runKernel(VariantID vid)
       }
       stopTimer();
 
-#if 1
+#if 0
       #pragma omp target exit data map(from:c[0:n]) map(delete:a[0:n],b[0:n])
 #else
       omp_target_memcpy( m_c, c, iend * sizeof(Real_type), 0, 0, h, d );
